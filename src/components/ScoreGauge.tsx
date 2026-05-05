@@ -33,8 +33,10 @@ export default function ScoreGauge({
   const targetOffset = circumference * (1 - score / 100);
 
   useEffect(() => {
-    if (!animate || hasAnimated.current) return;
-    hasAnimated.current = true;
+    if (!animate) return;
+    
+    // Reset score for re-runs
+    setDisplayScore(0);
 
     // Number counter
     const duration = 2000;
@@ -49,7 +51,10 @@ export default function ScoreGauge({
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.round(eased * score);
       setDisplayScore(current);
-      if (step >= steps) clearInterval(timer);
+      if (step >= steps) {
+        clearInterval(timer);
+        setDisplayScore(score); // ensure exact target is reached
+      }
     }, interval);
 
     // Trigger SVG animation after 1 frame
