@@ -58,23 +58,45 @@ export async function extractProjectData(
 
   // ── Detect business model ────────────────────────────────────────────────────
   let detectedModel = '';
-  for (const [model, keywords] of Object.entries(MODEL_KEYWORDS)) {
-    if (keywords.some(k => lowerDesc.includes(k))) {
-      detectedModel = model;
-      break;
+
+  // First try to extract explicit mention near "modèle économique" label
+  const modelLabelMatch = description.match(
+    /(?:modèle\s*économique|revenue model|monétisation)\s*[:\-]\s*([^.!?\n]{10,200})/i
+  );
+  if (modelLabelMatch) {
+    detectedModel = modelLabelMatch[1].trim();
+  } else {
+    // Detect from keyword banks — collect ALL matching models for hybrid cases
+    const detectedModels: string[] = [];
+    for (const [model, keywords] of Object.entries(MODEL_KEYWORDS)) {
+      if (keywords.some(k => lowerDesc.includes(k.toLowerCase()))) {
+        detectedModels.push(model);
+      }
     }
+    detectedModel = detectedModels.join(' + ');
   }
 
   // ── Extract target audience ──────────────────────────────────────────────────
   const ciblePatterns = [
-    /(?:cible|clientèle|utilisateurs?|clients?|pour les?|destiné aux?|s'adresse aux?)[:\s]+([^.!?\n]{10,80})/i,
-    /(?:public cible|audience)[:\s]+([^.!?\n]{10,80})/i,
-    /\b(entrepreneurs?|PME|startups?|étudiants?|professionnels?|particuliers?|entreprises?)[^.!?]{0,40}/i,
+    // Explicit label patterns (highest priority)
+    /(?:cible\s*(?:principale|prioritaire)?|public cible|clientèle cible|audience cible)\s*[:\-]\s*([^.!?\n]{10,120})/i,
+    // "destiné à / pour les / s'adresse à" patterns
+    /(?:destiné(?:e)?s?\s+(?:aux?|à\s+les?)|pour les?|s'adresse\s+(?:aux?|à))\s*([^.!?\n]{10,100})/i,
+    // Demographics pattern (age ranges, professions)
+    /\b((?:actifs?|entrepreneurs?|PME|startups?|étudiants?|professionnels?|particuliers?|entreprises?|dirigeants?)[^.!?]{5,80}(?:\d{2}[^.!?]{0,40})?)/i,
   ];
   let cible = '';
   for (const pattern of ciblePatterns) {
     const m = description.match(pattern);
-    if (m) { cible = m[1].trim(); break; }
+    if (m) {
+      const candidate = m[1].trim();
+      // Reject if it sounds like a problem statement
+      const problemWords = /ne savent pas|ont du mal|difficulté|manque|problème|souffrent/i;
+      if (!problemWords.test(candidate)) {
+        cible = candidate;
+        break;
+      }
+    }
   }
 
   // ── Extract problem ──────────────────────────────────────────────────────────

@@ -70,26 +70,26 @@ export default function CritiqueSection({ critique }: CritiqueSectionProps) {
   const sections = [
     {
       icon: <AlertTriangle size={18} className="text-red-500" />,
-      title: 'Ce qui ne va pas',
-      items: critique.whatIsWrong,
+      title: 'Les angles morts (Ce qui ne va pas)',
+      items: critique.faiblesses_majeures,
       accentColor: 'border-red-200 bg-red-50/40',
     },
     {
       icon: <Zap size={18} className="text-amber-500" />,
       title: 'Les menaces réelles',
-      items: critique.realThreats,
+      items: critique.menaces_reelles,
       accentColor: 'border-amber-200 bg-amber-50/40',
     },
     {
       icon: <Skull size={18} className="text-slate-500" />,
       title: 'Pourquoi ça peut échouer',
-      items: critique.whyItCanFail,
+      items: critique.scenarios_echec,
       accentColor: 'border-slate-200 bg-slate-50/40',
     },
     {
       icon: <CheckCircle size={18} className="text-emerald-500" />,
       title: 'Ce qu\'il faut changer maintenant',
-      items: critique.whatToChangeNow,
+      items: critique.actions_correctrices,
       accentColor: 'border-emerald-200 bg-emerald-50/40',
     },
   ];
@@ -97,17 +97,23 @@ export default function CritiqueSection({ critique }: CritiqueSectionProps) {
   return (
     <section aria-label="Section critique" className="space-y-4">
       {/* Header card */}
-      <div className="rounded-2xl border-2 border-red-200 bg-red-50 p-6">
+      <div className="rounded-2xl border-2 border-red-200 bg-red-50 p-6 transition-all duration-500">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">
-            ⚠️
+            {revealed ? '🔥' : '⚠️'}
           </div>
-          <div>
+          <div className="flex-1 min-w-0">
             <h3 className="text-xl font-bold text-red-800">Pas de mensonge, que la réalité</h3>
             <p className="mt-1 text-red-600 text-sm leading-relaxed">
-              Cette section contient l'analyse non filtrée de votre projet. Elle peut être difficile à lire,
-              mais c'est exactement ce dont vous avez besoin pour réussir.
+              Cette section contient l'analyse non filtrée de votre projet. Elle peut être difficile à lire, mais c'est exactement ce dont vous avez besoin pour réussir.
             </p>
+            {revealed && (
+              <div className="mt-4 p-4 bg-white/60 border border-red-200 rounded-lg animate-fade-in shadow-sm">
+                <p className="text-sm font-bold text-red-900 italic border-l-2 border-red-400 pl-3">
+                  "{critique.verdict_final}"
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

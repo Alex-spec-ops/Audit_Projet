@@ -10,6 +10,7 @@ import CritiqueSection from '../components/CritiqueSection';
 import CompetitorCard from '../components/CompetitorCard';
 import ScoreBreakdown from '../components/ScoreBreakdown';
 import RoadmapTimeline from '../components/RoadmapTimeline';
+import MarketLandscapeView from '../components/MarketLandscape';
 import { getScoreConfig, getPriorityConfig } from '../design-tokens';
 import { mockAuditResult } from '../data/mockData';
 import type { Recommendation } from '../types';
@@ -385,7 +386,15 @@ function AnchorNav() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Results() {
-  const result = mockAuditResult;
+  let result = mockAuditResult;
+  try {
+    const stored = localStorage.getItem('auditResult');
+    if (stored) {
+      result = JSON.parse(stored);
+    }
+  } catch {
+    // fallback to mock
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -411,7 +420,7 @@ export default function Results() {
                 title="Critique sans filtre"
                 subtitle="Ce que vous devez vraiment savoir sur votre projet."
                 icon={<span className="text-xl">⚠️</span>}
-                badge={`${result.critique.whatIsWrong.length + result.critique.realThreats.length} points`}
+                badge={`${result.critique.faiblesses_majeures.length + result.critique.menaces_reelles.length} points`}
               >
                 <CritiqueSection critique={result.critique} />
               </Section>
@@ -429,15 +438,21 @@ export default function Results() {
               </Section>
             </div>
 
-            {/* Competitors */}
+            {/* Competitors & Market Landscape */}
             <div id="competitors">
               <Section
-                title="Concurrents identifiés"
-                subtitle={`${result.competitors.length} acteurs qui occupent votre marché.`}
+                title="Paysage Concurrentiel"
+                subtitle="Analyse du marché et des acteurs en place."
                 icon={<span className="text-xl">🎯</span>}
                 badge={`${result.competitors.length} concurrents`}
               >
-                <CompetitorsSection competitors={result.competitors} />
+                <div className="space-y-8">
+                  <MarketLandscapeView landscape={result.landscape} />
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-4">Acteurs identifiés</h3>
+                    <CompetitorsSection competitors={result.competitors} />
+                  </div>
+                </div>
               </Section>
             </div>
 
@@ -449,7 +464,7 @@ export default function Results() {
                 icon={<span className="text-xl">🗺️</span>}
                 badge="6 phases"
               >
-                <RoadmapTimeline phases={result.roadmap} />
+                <RoadmapTimeline data={result.roadmap} />
               </Section>
             </div>
 

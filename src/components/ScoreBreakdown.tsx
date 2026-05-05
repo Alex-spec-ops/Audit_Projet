@@ -84,14 +84,14 @@ function CriteriaRow({ criteria, delay }: CriteriaRowProps) {
   );
 }
 
-const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value: number; payload: { subject: string } }> }) => {
+const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value: number; payload: { subject: string; rawScore: number; maxScore: number; score: number } }> }) => {
   if (active && payload && payload.length) {
-    const { value, payload: p } = payload[0];
-    const config = getScoreConfig(value);
+    const { payload: p } = payload[0];
+    const config = getScoreConfig(p.score);
     return (
       <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-lg">
         <p className="text-xs text-slate-500 font-medium">{p.subject}</p>
-        <p className={`text-lg font-bold ${config.textClass}`}>{value}<span className="text-xs text-slate-400">/100</span></p>
+        <p className={`text-lg font-bold ${config.textClass}`}>{p.rawScore}<span className="text-xs text-slate-400">/{p.maxScore}</span></p>
       </div>
     );
   }
@@ -107,7 +107,9 @@ export default function ScoreBreakdown({ criteria }: ScoreBreakdownProps) {
 
   const radarData = criteria.map(c => ({
     subject: c.name,
-    score: c.score,
+    score: (c.score / c.maxScore) * 100, // Normalized for radar
+    rawScore: c.score,
+    maxScore: c.maxScore,
     fullMark: 100,
   }));
 
@@ -189,17 +191,17 @@ export default function ScoreBreakdown({ criteria }: ScoreBreakdownProps) {
             </p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { name: 'Marché cible', weight: '20%' },
-                { name: 'Modèle économique', weight: '20%' },
-                { name: 'Innovation', weight: '15%' },
-                { name: 'Faisabilité tech', weight: '15%' },
-                { name: 'Équipe', weight: '15%' },
-                { name: 'Concurrence', weight: '10%' },
-                { name: 'Timing', weight: '5%' },
+                { name: 'Pertinence du problème', weight: '20%' },
+                { name: 'Différenciation', weight: '20%' },
+                { name: 'Faisabilité technique', weight: '15%' },
+                { name: 'Viabilité économique', weight: '15%' },
+                { name: 'Timing marché', weight: '10%' },
+                { name: 'Barrières concurrentielles', weight: '10%' },
+                { name: 'Scalabilité', weight: '10%' },
               ].map(item => (
                 <div key={item.name} className="flex justify-between text-xs px-3 py-2 bg-slate-50 rounded-lg">
-                  <span className="text-slate-600">{item.name}</span>
-                  <span className="font-semibold text-slate-800">{item.weight}</span>
+                  <span className="text-slate-600 truncate mr-2" title={item.name}>{item.name}</span>
+                  <span className="font-semibold text-slate-800 flex-shrink-0">{item.weight}</span>
                 </div>
               ))}
             </div>

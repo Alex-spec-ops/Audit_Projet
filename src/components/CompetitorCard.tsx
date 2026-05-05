@@ -1,4 +1,4 @@
-import { ExternalLink, Shield, ShieldAlert, ShieldX } from 'lucide-react';
+import { ExternalLink, Shield, ShieldAlert, ShieldX, Target, Zap, TrendingUp, DollarSign, Crosshair, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { getThreatConfig } from '../design-tokens';
 import type { Competitor } from '../types';
 
@@ -11,6 +11,15 @@ function ThreatIcon({ level }: { level: Competitor['threatLevel'] }) {
   if (level === 'high') return <ShieldX size={16} className="text-red-500" />;
   if (level === 'medium') return <ShieldAlert size={16} className="text-amber-500" />;
   return <Shield size={16} className="text-emerald-500" />;
+}
+
+function getTypeLabel(type: Competitor['type']) {
+  switch (type) {
+    case 'direct': return { label: 'Direct', color: 'bg-red-50 text-red-700 border-red-200' };
+    case 'indirect': return { label: 'Indirect', color: 'bg-amber-50 text-amber-700 border-amber-200' };
+    case 'alternative': return { label: 'Alternative', color: 'bg-slate-100 text-slate-700 border-slate-200' };
+    default: return { label: 'Direct', color: 'bg-red-50 text-red-700 border-red-200' };
+  }
 }
 
 function getInitials(name: string) {
@@ -39,13 +48,13 @@ export default function CompetitorCard({ competitor, rank }: CompetitorCardProps
   const threat = getThreatConfig(competitor.threatLevel);
   const initials = getInitials(competitor.name);
   const avatarBg = getAvatarBg(competitor.name);
+  const typeConfig = getTypeLabel(competitor.type);
 
   return (
-    <div className="card p-5 flex flex-col gap-4 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
+    <div className="card p-5 flex flex-col gap-4 hover:shadow-card-hover transition-all duration-200">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          {/* Avatar */}
           <div
             className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${avatarBg}`}
             aria-hidden="true"
@@ -70,66 +79,83 @@ export default function CompetitorCard({ competitor, rank }: CompetitorCardProps
           </div>
         </div>
 
-        {/* Threat badge */}
-        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${threat.badgeClass}`}>
-          <ThreatIcon level={competitor.threatLevel} />
-          {threat.label}
+        <div className="flex flex-col items-end gap-1.5">
+          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${threat.badgeClass}`}>
+            <ThreatIcon level={competitor.threatLevel} />
+            {threat.label}
+          </div>
+          <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${typeConfig.color}`}>
+            {typeConfig.label}
+          </span>
         </div>
       </div>
 
-      {/* Description */}
-      <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
-        {competitor.description}
-      </p>
+      <div className="text-sm text-slate-600 border-l-2 border-slate-200 pl-3 py-0.5 my-1 italic">
+        "{competitor.propositionValeur}"
+      </div>
 
-      {/* Stats */}
-      {(competitor.fundingAmount || competitor.userCount) && (
-        <div className="flex gap-2 flex-wrap">
-          {competitor.userCount && (
-            <span className="badge bg-blue-50 text-blue-700 text-xs">
-              👥 {competitor.userCount}
-            </span>
-          )}
-          {competitor.fundingAmount && (
-            <span className="badge bg-purple-50 text-purple-700 text-xs">
-              💰 {competitor.fundingAmount}
-            </span>
-          )}
+      {/* Grid of details */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-1">
+        <div className="col-span-2">
+           <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1">
+             <Crosshair size={13} /> Positionnement
+           </p>
+           <p className="text-sm text-slate-700">{competitor.positioning}</p>
         </div>
-      )}
 
-      {/* Strengths */}
-      <div>
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Forces clés</p>
-        <div className="flex flex-wrap gap-1.5">
-          {competitor.strengths.map((strength, i) => (
-            <span
-              key={i}
-              className="text-xs px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full font-medium"
-            >
-              {strength}
-            </span>
-          ))}
+        <div>
+          <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1">
+            <DollarSign size={13} /> Pricing
+          </p>
+          <p className="text-sm text-slate-700">{competitor.pricing}</p>
+        </div>
+
+        <div>
+          <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1">
+            <TrendingUp size={13} /> Traction
+          </p>
+          <p className="text-sm text-slate-700">{competitor.traction}</p>
+        </div>
+        
+        <div className="col-span-2">
+          <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1">
+            <Zap size={13} /> Fonctionnalités clés
+          </p>
+          <div className="flex flex-wrap gap-1">
+            {competitor.fonctionnalitesCles.map((feat, i) => (
+              <span key={i} className="text-[11px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                {feat}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Threat bar */}
-      <div>
-        <div className="flex justify-between items-center mb-1.5">
-          <span className="text-xs text-slate-400 font-medium">Niveau de menace</span>
+      {/* SWOT mini */}
+      <div className="grid grid-cols-2 gap-3 mt-2 pt-4 border-t border-slate-100">
+        <div>
+          <p className="text-xs font-semibold text-emerald-600 flex items-center gap-1 mb-1.5">
+            <ThumbsUp size={12} /> Forces
+          </p>
+          <ul className="text-xs text-slate-600 space-y-1">
+            {competitor.strengths.slice(0, 3).map((s, i) => (
+              <li key={i} className="flex items-start gap-1">
+                <span className="text-emerald-400 mt-0.5">•</span> <span>{s}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full ${threat.dotClass} transition-all duration-1000`}
-            style={{
-              width:
-                competitor.threatLevel === 'high'
-                  ? '90%'
-                  : competitor.threatLevel === 'medium'
-                  ? '55%'
-                  : '25%',
-            }}
-          />
+        <div>
+          <p className="text-xs font-semibold text-red-600 flex items-center gap-1 mb-1.5">
+            <ThumbsDown size={12} /> Faiblesses
+          </p>
+          <ul className="text-xs text-slate-600 space-y-1">
+            {competitor.weaknesses.slice(0, 3).map((w, i) => (
+              <li key={i} className="flex items-start gap-1">
+                <span className="text-red-400 mt-0.5">•</span> <span>{w}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

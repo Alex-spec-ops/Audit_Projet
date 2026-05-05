@@ -13,15 +13,46 @@ export interface ScoreCriteria {
   details: string;
 }
 
+export type CompetitorType = 'direct' | 'indirect' | 'alternative';
+
 export interface Competitor {
   id: string;
   name: string;
   website: string;
-  strengths: string[];
-  threatLevel: ThreatLevel;
   description: string;
+  propositionValeur: string;
+  fonctionnalitesCles: string[];
+  strengths: string[];
+  weaknesses: string[];
+  pricing: string;
+  traction: string;
+  positioning: string;
+  type: CompetitorType;
+  threatLevel: ThreatLevel;
   fundingAmount?: string;
   userCount?: string;
+}
+
+export type MarketSaturation = 'faible' | 'moyen' | 'élevé';
+
+export interface MarketLandscape {
+  saturation_marche: MarketSaturation;
+  saturation_justification: string;
+  barrieres_entree: string[];
+  opportunites: string[];
+  tendances: string[];
+}
+
+export interface CompetitiveAnalysis {
+  concurrents: Competitor[];
+  landscape: MarketLandscape;
+  generatedAt: string;
+}
+
+export interface RoadmapRessources {
+  budget: string;
+  personnes: string;
+  temps: string;
 }
 
 export interface RoadmapPhase {
@@ -29,9 +60,19 @@ export interface RoadmapPhase {
   name: string;
   duration: string;
   icon: string;
-  objectives: string[];
+  objectifs: string[];
+  livrables: string[];
+  ressources: RoadmapRessources;
+  kpis: string[];
+  risques: string[];
+  goNogo: string;
   isCurrentPhase: boolean;
-  details: string;
+}
+
+export interface RoadmapData {
+  phases: RoadmapPhase[];
+  jalons_critiques: string[];
+  budget_estime: string;
 }
 
 export interface Recommendation {
@@ -43,10 +84,11 @@ export interface Recommendation {
 }
 
 export interface CritiqueData {
-  whatIsWrong: string[];
-  realThreats: string[];
-  whyItCanFail: string[];
-  whatToChangeNow: string[];
+  faiblesses_majeures: string[];
+  menaces_reelles: string[];
+  scenarios_echec: string[];
+  actions_correctrices: string[];
+  verdict_final: string;
 }
 
 export interface AuditResult {
@@ -59,7 +101,8 @@ export interface AuditResult {
   critique: CritiqueData;
   scoreBreakdown: ScoreCriteria[];
   competitors: Competitor[];
-  roadmap: RoadmapPhase[];
+  landscape: MarketLandscape;
+  roadmap: RoadmapData;
   recommendations: Recommendation[];
   auditDate: string;   // ISO 8601
 }

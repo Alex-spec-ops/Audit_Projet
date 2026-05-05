@@ -19,25 +19,25 @@ const ACCEPTED_TYPES = ['.pdf', '.docx', '.pptx', '.doc', '.ppt'];
 const MAX_FILE_MB = 10;
 
 function ProgressBar({ step }: { step: number }) {
+  const labels = ['Description', 'Extraction IA', 'Analyse', 'Résultats'];
   return (
-    <div className="flex items-center gap-3 text-sm" aria-label={`Étape ${step} sur 3`}>
-      {[1, 2, 3].map(s => (
-        <div key={s} className="flex items-center gap-2">
+    <div className="flex items-center gap-2 text-sm" aria-label={`Étape ${step} sur 4`}>
+      {[1, 2, 3, 4].map(s => (
+        <div key={s} className="flex items-center gap-1.5">
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300
               ${s === step ? 'bg-primary-600 text-white shadow-glow-blue' : s < step ? 'bg-primary-100 text-primary-600' : 'bg-slate-100 text-slate-400'}`}
           >
             {s}
           </div>
-          {s < 3 && <div className={`h-0.5 w-8 transition-colors duration-300 ${s < step ? 'bg-primary-400' : 'bg-slate-200'}`} />}
+          {s < 4 && <div className={`h-0.5 w-5 transition-colors duration-300 ${s < step ? 'bg-primary-400' : 'bg-slate-200'}`} />}
         </div>
       ))}
-      <span className="ml-2 text-slate-500 text-xs hidden sm:block">
-        {step === 1 ? 'Décrivez votre projet' : step === 2 ? 'Analyse en cours' : 'Résultats'}
-      </span>
+      <span className="ml-2 text-slate-500 text-xs hidden sm:block">{labels[step - 1]}</span>
     </div>
   );
 }
+
 
 interface FileBadgeProps {
   file: File;
@@ -112,7 +112,7 @@ export default function Submit() {
       'auditSubmission',
       JSON.stringify({ description, projectName, industry, fileNames: files.map(f => f.name) })
     );
-    navigate('/analyzing', { state: { projectName: projectName || 'Mon Projet' } });
+    navigate('/extract', { state: { projectName: projectName || 'Mon Projet' } });
   };
 
   return (

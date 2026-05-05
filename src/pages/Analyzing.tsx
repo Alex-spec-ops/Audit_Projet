@@ -41,19 +41,55 @@ export default function Analyzing() {
   const progress = Math.min(ease(tick / TOTAL_TICKS), 100);
   const stage = getCurrentStage(progress);
 
-  // Progress ticker
+  // Run the orchestrator
   useEffect(() => {
+    let extraction = null;
+    try {
+      extraction = JSON.parse(localStorage.getItem('auditExtraction') || 'null');
+    } catch {
+      // ignore
+    }
+
+    if (!extraction) {
+      navigate('/submit', { replace: true });
+      return;
+    }
+
+    let isDone = false;
+    
+    // Start visual progress
     const interval = setInterval(() => {
       setTick(prev => {
         const next = prev + 1;
-        if (next >= TOTAL_TICKS && !doneRef.current) {
-          doneRef.current = true;
-          clearInterval(interval);
-          setTimeout(() => navigate('/results', { replace: true }), 600);
+        // Don't reach 100% until orchestrator finishes
+        if (next >= TOTAL_TICKS && !isDone) {
+          return TOTAL_TICKS - 1; 
         }
         return next;
       });
     }, TICK_INTERVAL_MS);
+
+    // Start orchestration
+    import('../lib/auditOrchestrator').then(({ runAuditOrchestration }) => {
+      runAuditOrchestration(extraction, (step) => {
+        // Optional: update visual progress based on actual step
+      }).then((result) => {
+        isDone = true;
+        if (!doneRef.current) {
+          doneRef.current = true;
+          clearInterval(interval);
+          setTick(TOTAL_TICKS); // jump to 100%
+          setTimeout(() => navigate('/results', { replace: true }), 600);
+        }
+      }).catch(err => {
+        console.error('Audit failed', err);
+        // Navigate anyway or show error, for now just go to results
+        isDone = true;
+        clearInterval(interval);
+        setTimeout(() => navigate('/results', { replace: true }), 600);
+      });
+    });
+
     return () => clearInterval(interval);
   }, [navigate]);
 
