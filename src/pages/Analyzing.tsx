@@ -2,9 +2,9 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ANALYZING_STAGES, MOTIVATING_MESSAGES } from '../design-tokens';
 
-const TOTAL_DURATION_MS = 9000;  // 9 seconds total
-const TICK_INTERVAL_MS = 60;     // update every 60ms
-const TOTAL_TICKS = TOTAL_DURATION_MS / TICK_INTERVAL_MS; // 150 ticks
+const TOTAL_DURATION_MS = 9000;
+const TICK_INTERVAL_MS = 60;
+const TOTAL_TICKS = TOTAL_DURATION_MS / TICK_INTERVAL_MS;
 
 function getCurrentStage(progress: number) {
   return (
@@ -13,15 +13,12 @@ function getCurrentStage(progress: number) {
   );
 }
 
-// Smooth easing function for the progress bar — slows down at key stage transitions
 function ease(t: number): number {
-  // Slow down at 25, 50, 75 to simulate "real" processing pauses
   const breaks = [0.25, 0.5, 0.75, 1.0];
   for (const b of breaks) {
     const lower = b - 0.25;
     const relT = (t - lower) / 0.25;
     if (t <= b) {
-      // Ease-out within this segment, with a slight pause at 80-100% of segment
       const adjusted = relT < 0.8 ? relT / 0.8 * 0.92 : 0.92 + (relT - 0.8) / 0.2 * 0.08;
       return (lower + adjusted * 0.25) * 100;
     }
@@ -41,7 +38,6 @@ export default function Analyzing() {
   const progress = Math.min(ease(tick / TOTAL_TICKS), 100);
   const stage = getCurrentStage(progress);
 
-  // Run the orchestrator
   useEffect(() => {
     let extraction = null;
     try {
@@ -56,34 +52,27 @@ export default function Analyzing() {
     }
 
     let isDone = false;
-    
-    // Start visual progress
+
     const interval = setInterval(() => {
       setTick(prev => {
         const next = prev + 1;
-        // Don't reach 100% until orchestrator finishes
         if (next >= TOTAL_TICKS && !isDone) {
-          return TOTAL_TICKS - 1; 
+          return TOTAL_TICKS - 1;
         }
         return next;
       });
     }, TICK_INTERVAL_MS);
 
-    // Start orchestration
     import('../lib/auditOrchestrator').then(({ runAuditOrchestration }) => {
-      runAuditOrchestration(extraction, (step) => {
-        // Optional: update visual progress based on actual step
-      }).then((result) => {
+      runAuditOrchestration(extraction, (_step) => {}).then((_result) => {
         isDone = true;
         if (!doneRef.current) {
           doneRef.current = true;
           clearInterval(interval);
-          setTick(TOTAL_TICKS); // jump to 100%
+          setTick(TOTAL_TICKS);
           setTimeout(() => navigate('/results', { replace: true }), 600);
         }
-      }).catch(err => {
-        console.error('Audit failed', err);
-        // Navigate anyway or show error, for now just go to results
+      }).catch(_err => {
         isDone = true;
         clearInterval(interval);
         setTimeout(() => navigate('/results', { replace: true }), 600);
@@ -93,7 +82,6 @@ export default function Analyzing() {
     return () => clearInterval(interval);
   }, [navigate]);
 
-  // Rotate motivating messages every 2.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setMsgIndex(i => (i + 1) % MOTIVATING_MESSAGES.length);
@@ -105,21 +93,21 @@ export default function Analyzing() {
   const stageIndex = ANALYZING_STAGES.findIndex(s => s === stage);
 
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-center px-4"
-      style={{ background: 'linear-gradient(135deg, #0F172A, #1E1B4B)' }}
-    >
-      {/* Background pattern */}
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#0A0E14]">
+      {/* Background grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" aria-hidden />
+
+      {/* Top red accent */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-primary-500" />
 
       <div className="relative w-full max-w-md space-y-10 animate-fade-in">
         {/* Logo */}
         <div className="flex justify-center">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-xl flex items-center justify-center text-white font-black text-lg">
+            <div className="w-10 h-10 bg-primary-500 flex items-center justify-center text-white font-black text-lg font-mono border-2 border-primary-700">
               ◈
             </div>
-            <span className="text-white font-bold text-xl">ProjectAudit<span className="text-primary-400">.ai</span></span>
+            <span className="text-white font-bold text-xl font-display">VeritAudit<span className="text-primary-500">.ai</span></span>
           </div>
         </div>
 
@@ -128,12 +116,12 @@ export default function Analyzing() {
           <div className="relative w-32 h-32">
             {/* Outer rotating ring */}
             <div
-              className="absolute inset-0 rounded-full border-2 border-primary-500/30 border-t-primary-500 animate-spin-slow"
+              className="absolute inset-0 rounded-full border-2 border-primary-900 border-t-primary-500 animate-spin-slow"
               style={{ animationDuration: '4s' }}
             />
-            {/* Inner rotating ring (opposite) */}
+            {/* Inner rotating ring */}
             <div
-              className="absolute inset-3 rounded-full border-2 border-secondary-500/30 border-b-secondary-500 animate-spin-slow"
+              className="absolute inset-3 rounded-full border-2 border-[#2D3541] border-b-secondary-500 animate-spin-slow"
               style={{ animationDuration: '3s', animationDirection: 'reverse' }}
             />
             {/* Center stage emoji */}
@@ -153,8 +141,8 @@ export default function Analyzing() {
 
         {/* Project name */}
         <div className="text-center">
-          <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">Analyse de</p>
-          <h1 className="mt-1 text-2xl font-black text-white">"{projectName}"</h1>
+          <p className="text-[#4B5563] text-xs font-bold uppercase tracking-widest font-mono">Analyse de</p>
+          <h1 className="mt-1 text-2xl font-black text-white font-display">"{projectName}"</h1>
         </div>
 
         {/* Stage labels */}
@@ -168,19 +156,23 @@ export default function Analyzing() {
                 className={`flex items-center gap-3 transition-all duration-500
                   ${isDone ? 'opacity-50' : isCurrent ? 'opacity-100' : 'opacity-25'}`}
               >
-                {/* Status dot */}
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300
-                  ${isDone ? 'bg-emerald-500' : isCurrent ? 'bg-primary-500 animate-pulse-slow' : 'bg-slate-700'}`}>
+                {/* Status indicator — square */}
+                <div className={`w-7 h-7 flex items-center justify-center flex-shrink-0 transition-all duration-300 border-2
+                  ${isDone
+                    ? 'bg-emerald-900/30 border-emerald-700'
+                    : isCurrent
+                    ? 'bg-primary-900/30 border-primary-600 animate-pulse-slow'
+                    : 'bg-[#1C2128] border-[#2D3541]'}`}>
                   {isDone ? (
                     <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-                      <path d="M1 5L4 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M1 5L4 8L11 1" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   ) : (
                     <span className="text-sm">{s.emoji}</span>
                   )}
                 </div>
 
-                <span className={`text-sm font-medium ${isCurrent ? 'text-white' : isDone ? 'text-emerald-400' : 'text-slate-500'}`}>
+                <span className={`text-sm font-medium font-mono ${isCurrent ? 'text-white' : isDone ? 'text-emerald-400' : 'text-[#4B5563]'}`}>
                   {s.label}
                   {isCurrent && (
                     <span className="ml-2 inline-block">
@@ -198,7 +190,7 @@ export default function Analyzing() {
                 </span>
 
                 {isDone && (
-                  <span className="ml-auto text-xs text-emerald-400 font-semibold">✓</span>
+                  <span className="ml-auto text-xs text-emerald-400 font-bold font-mono">✓</span>
                 )}
               </div>
             );
@@ -207,17 +199,14 @@ export default function Analyzing() {
 
         {/* Progress bar */}
         <div className="space-y-2">
-          <div className="flex justify-between text-xs text-slate-400 font-mono">
+          <div className="flex justify-between text-xs text-[#4B5563] font-mono">
             <span>Progression</span>
             <span className="text-white font-bold">{progressPct}%</span>
           </div>
-          <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#1C2128] border border-[#2D3541] overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-150 ease-linear"
-              style={{
-                width: `${progressPct}%`,
-                background: 'linear-gradient(90deg, #2563EB, #7C3AED)',
-              }}
+              className="h-full transition-all duration-150 ease-linear bg-primary-500"
+              style={{ width: `${progressPct}%` }}
             />
           </div>
         </div>
@@ -226,14 +215,14 @@ export default function Analyzing() {
         <div className="text-center min-h-[3rem] flex items-center justify-center">
           <p
             key={msgIndex}
-            className="text-slate-400 text-sm italic leading-relaxed animate-fade-in max-w-xs"
+            className="text-[#6B7280] text-sm italic leading-relaxed animate-fade-in max-w-xs font-mono"
           >
             "{MOTIVATING_MESSAGES[msgIndex]}"
           </p>
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-slate-600 text-xs">
+        <p className="text-center text-[#2D3541] text-xs font-mono border-t border-[#1C2128] pt-4">
           Ne fermez pas cette fenêtre · L'analyse est en cours
         </p>
       </div>

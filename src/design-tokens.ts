@@ -26,44 +26,44 @@ export function getScoreConfig(score: number): ScoreConfig {
   const map: Record<ScoreLevel, ScoreConfig> = {
     low: {
       color: '#DC2626',
-      trackColor: '#FEE2E2',
-      bgClass: 'bg-red-50',
-      borderClass: 'border-red-200',
-      textClass: 'text-red-600',
-      badgeClass: 'bg-red-100 text-red-700',
+      trackColor: '#2D1515',
+      bgClass: 'bg-red-900/20',
+      borderClass: 'border-red-900',
+      textClass: 'text-red-400',
+      badgeClass: 'bg-red-900/30 text-red-400 border border-red-800',
       label: 'Projet à risque élevé',
       emoji: '⚠️',
       levelLabel: 'Faible',
     },
     medium: {
       color: '#F59E0B',
-      trackColor: '#FEF3C7',
-      bgClass: 'bg-amber-50',
-      borderClass: 'border-amber-200',
-      textClass: 'text-amber-600',
-      badgeClass: 'bg-amber-100 text-amber-700',
+      trackColor: '#2A1F00',
+      bgClass: 'bg-amber-900/20',
+      borderClass: 'border-amber-900',
+      textClass: 'text-amber-400',
+      badgeClass: 'bg-amber-900/30 text-amber-400 border border-amber-800',
       label: 'Potentiel moyen',
       emoji: '⚡',
       levelLabel: 'Moyen',
     },
     good: {
       color: '#10B981',
-      trackColor: '#D1FAE5',
-      bgClass: 'bg-emerald-50',
-      borderClass: 'border-emerald-200',
-      textClass: 'text-emerald-600',
-      badgeClass: 'bg-emerald-100 text-emerald-700',
+      trackColor: '#001F18',
+      bgClass: 'bg-emerald-900/20',
+      borderClass: 'border-emerald-900',
+      textClass: 'text-emerald-400',
+      badgeClass: 'bg-emerald-900/30 text-emerald-400 border border-emerald-800',
       label: 'Bon potentiel',
       emoji: '✅',
       levelLabel: 'Bon',
     },
     excellent: {
-      color: '#059669',
-      trackColor: '#A7F3D0',
-      bgClass: 'bg-green-50',
-      borderClass: 'border-green-200',
-      textClass: 'text-green-700',
-      badgeClass: 'bg-green-100 text-green-800',
+      color: '#06B6D4',
+      trackColor: '#002030',
+      bgClass: 'bg-cyan-900/20',
+      borderClass: 'border-cyan-900',
+      textClass: 'text-cyan-400',
+      badgeClass: 'bg-cyan-900/30 text-cyan-400 border border-cyan-800',
       label: 'Excellent potentiel',
       emoji: '🚀',
       levelLabel: 'Excellent',
@@ -84,17 +84,17 @@ export function getThreatConfig(level: ThreatLevel): ThreatConfig {
   const map: Record<ThreatLevel, ThreatConfig> = {
     low: {
       label: 'Faible',
-      badgeClass: 'bg-emerald-100 text-emerald-700',
+      badgeClass: 'bg-emerald-900/30 text-emerald-400',
       dotClass: 'bg-emerald-500',
     },
     medium: {
       label: 'Moyen',
-      badgeClass: 'bg-amber-100 text-amber-700',
+      badgeClass: 'bg-amber-900/30 text-amber-400',
       dotClass: 'bg-amber-500',
     },
     high: {
       label: 'Élevé',
-      badgeClass: 'bg-red-100 text-red-700',
+      badgeClass: 'bg-red-900/30 text-red-400',
       dotClass: 'bg-red-500',
     },
   };
@@ -113,17 +113,17 @@ export function getPriorityConfig(priority: Priority): PriorityConfig {
   const map: Record<Priority, PriorityConfig> = {
     urgent: {
       label: 'Urgent',
-      textClass: 'text-red-600',
+      textClass: 'text-red-400',
       dotClass: 'bg-red-500',
     },
     important: {
       label: 'Important',
-      textClass: 'text-amber-600',
+      textClass: 'text-amber-400',
       dotClass: 'bg-amber-500',
     },
     secondary: {
       label: 'Secondaire',
-      textClass: 'text-emerald-600',
+      textClass: 'text-emerald-400',
       dotClass: 'bg-emerald-500',
     },
   };
@@ -157,10 +157,10 @@ export const INDUSTRIES = [
 // ─── Analyzing stages ─────────────────────────────────────────────────────────
 
 export const ANALYZING_STAGES = [
-  { label: 'Analyse de votre idée', emoji: '🔍', startPct: 0,  endPct: 25 },
-  { label: 'Recherche de concurrents', emoji: '🌐', startPct: 25, endPct: 50 },
-  { label: 'Calcul du score',    emoji: '📊', startPct: 50, endPct: 75 },
-  { label: 'Rédaction de la critique', emoji: '✍️', startPct: 75, endPct: 100 },
+  { label: 'Analyse de votre idée',       emoji: '🔍', startPct: 0,  endPct: 25 },
+  { label: 'Recherche de concurrents',    emoji: '🌐', startPct: 25, endPct: 50 },
+  { label: 'Calcul du score',             emoji: '📊', startPct: 50, endPct: 75 },
+  { label: 'Rédaction de la critique',    emoji: '✍️', startPct: 75, endPct: 100 },
 ] as const;
 
 export const MOTIVATING_MESSAGES = [

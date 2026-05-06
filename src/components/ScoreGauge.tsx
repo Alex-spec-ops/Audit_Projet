@@ -9,7 +9,7 @@ interface ScoreGaugeProps {
 }
 
 const SIZE_MAP = {
-  sm: { svgSize: 120, radius: 46, strokeWidth: 8, fontSize: 22, subFontSize: 11 },
+  sm: { svgSize: 120, radius: 46, strokeWidth: 8,  fontSize: 22, subFontSize: 11 },
   md: { svgSize: 180, radius: 70, strokeWidth: 10, fontSize: 34, subFontSize: 13 },
   lg: { svgSize: 240, radius: 96, strokeWidth: 12, fontSize: 48, subFontSize: 16 },
 };
@@ -34,11 +34,9 @@ export default function ScoreGauge({
 
   useEffect(() => {
     if (!animate) return;
-    
-    // Reset score for re-runs
+
     setDisplayScore(0);
 
-    // Number counter
     const duration = 2000;
     const steps = 80;
     const interval = duration / steps;
@@ -47,17 +45,15 @@ export default function ScoreGauge({
     const timer = setInterval(() => {
       step++;
       const progress = step / steps;
-      // easeOutCubic
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.round(eased * score);
       setDisplayScore(current);
       if (step >= steps) {
         clearInterval(timer);
-        setDisplayScore(score); // ensure exact target is reached
+        setDisplayScore(score);
       }
     }, interval);
 
-    // Trigger SVG animation after 1 frame
     requestAnimationFrame(() => {
       setStrokeOffset(targetOffset);
     });
@@ -65,7 +61,6 @@ export default function ScoreGauge({
     return () => clearInterval(timer);
   }, [animate, score, targetOffset]);
 
-  // Non-animated: set offset immediately
   useEffect(() => {
     if (!animate) setStrokeOffset(targetOffset);
   }, [animate, targetOffset]);
@@ -82,24 +77,13 @@ export default function ScoreGauge({
           aria-label={`Score : ${score} sur 100`}
           role="img"
         >
-          {/* Glow filter */}
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
           {/* Background track */}
           <circle
             cx={cx}
             cy={cy}
             r={radius}
             fill="none"
-            stroke="#E2E8F0"
+            stroke="#2D3541"
             strokeWidth={strokeWidth}
           />
 
@@ -111,11 +95,10 @@ export default function ScoreGauge({
             fill="none"
             stroke={config.color}
             strokeWidth={strokeWidth}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             strokeDasharray={circumference}
             strokeDashoffset={currentOffset}
             transform={`rotate(-90 ${cx} ${cy})`}
-            filter="url(#glow)"
             style={{
               transition: animate
                 ? 'stroke-dashoffset 2s cubic-bezier(0.34, 1.56, 0.64, 1)'
@@ -130,8 +113,8 @@ export default function ScoreGauge({
             textAnchor="middle"
             dominantBaseline="middle"
             fontSize={fontSize}
-            fontWeight="800"
-            fontFamily="Inter, sans-serif"
+            fontWeight="700"
+            fontFamily='"JetBrains Mono", "Fira Code", monospace'
             fill={config.color}
           >
             {displayScore}
@@ -144,8 +127,8 @@ export default function ScoreGauge({
             textAnchor="middle"
             fontSize={subFontSize}
             fontWeight="500"
-            fontFamily="Inter, sans-serif"
-            fill="#94A3B8"
+            fontFamily='"JetBrains Mono", monospace'
+            fill="#6B7280"
           >
             /100
           </text>
@@ -154,12 +137,10 @@ export default function ScoreGauge({
 
       {showLabel && (
         <div className="text-center">
-          <span
-            className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold ${config.badgeClass}`}
-          >
+          <span className={`score-badge text-base ${config.badgeClass}`}>
             {config.emoji} {config.label}
           </span>
-          <p className="mt-1.5 text-slate-400 text-sm font-medium tracking-wide uppercase">
+          <p className="mt-2 text-[#6B7280] text-xs font-mono uppercase tracking-widest">
             Niveau : {config.levelLabel}
           </p>
         </div>

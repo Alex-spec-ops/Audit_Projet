@@ -2,12 +2,12 @@ import { BatteryWarning, TrendingUp, AlertTriangle, Lightbulb } from 'lucide-rea
 import type { MarketLandscape } from '../types';
 
 export default function MarketLandscapeView({ landscape }: { landscape: MarketLandscape }) {
-  const getSaturationColor = (level: string) => {
+  const getSaturationStyle = (level: string) => {
     switch (level) {
-      case 'faible': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      case 'moyen': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'élevé': return 'bg-red-100 text-red-700 border-red-200';
-      default: return 'bg-slate-100 text-slate-700 border-slate-200';
+      case 'faible': return 'bg-emerald-900/20 text-emerald-400 border border-emerald-800';
+      case 'moyen':  return 'bg-amber-900/20 text-amber-400 border border-amber-800';
+      case 'élevé':  return 'bg-red-900/20 text-red-400 border border-red-800';
+      default:       return 'bg-[#1C2128] text-[#9CA3AF] border border-[#3F4753]';
     }
   };
 
@@ -16,29 +16,29 @@ export default function MarketLandscapeView({ landscape }: { landscape: MarketLa
       {/* Saturation Card */}
       <div className="card p-5 border-l-4 border-l-primary-500 md:col-span-2">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-slate-800 flex items-center gap-2">
+          <h3 className="font-bold text-white flex items-center gap-2 font-display text-sm">
             <BatteryWarning size={18} className="text-primary-500" />
             Saturation du marché
           </h3>
-          <span className={`text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-full border ${getSaturationColor(landscape.saturation_marche)}`}>
+          <span className={`text-xs font-bold font-mono px-3 py-1 uppercase tracking-wider ${getSaturationStyle(landscape.saturation_marche)}`}>
             {landscape.saturation_marche}
           </span>
         </div>
-        <p className="text-sm text-slate-600 leading-relaxed">
+        <p className="text-sm text-[#9CA3AF] leading-relaxed">
           {landscape.saturation_justification}
         </p>
       </div>
 
       {/* Barrières à l'entrée */}
-      <div className="card p-5 border-t-4 border-t-red-400">
-        <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3">
-          <AlertTriangle size={18} className="text-red-500" />
+      <div className="card p-5 border-t-4 border-t-primary-500">
+        <h3 className="font-bold text-white flex items-center gap-2 mb-3 font-display text-sm">
+          <AlertTriangle size={18} className="text-primary-500" />
           Barrières à l'entrée
         </h3>
         <ul className="space-y-2">
           {landscape.barrieres_entree.map((item, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-              <span className="text-red-400 mt-1 flex-shrink-0">•</span>
+            <li key={i} className="flex items-start gap-2 text-sm text-[#D1D5DB]">
+              <span className="text-primary-500 mt-1 flex-shrink-0">▸</span>
               {item}
             </li>
           ))}
@@ -46,15 +46,15 @@ export default function MarketLandscapeView({ landscape }: { landscape: MarketLa
       </div>
 
       {/* Opportunités */}
-      <div className="card p-5 border-t-4 border-t-emerald-400">
-        <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3">
-          <Lightbulb size={18} className="text-emerald-500" />
+      <div className="card p-5 border-t-4 border-t-emerald-600">
+        <h3 className="font-bold text-white flex items-center gap-2 mb-3 font-display text-sm">
+          <Lightbulb size={18} className="text-emerald-400" />
           Opportunités de différenciation
         </h3>
         <ul className="space-y-2">
           {landscape.opportunites.map((item, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-              <span className="text-emerald-400 mt-1 flex-shrink-0">•</span>
+            <li key={i} className="flex items-start gap-2 text-sm text-[#D1D5DB]">
+              <span className="text-emerald-500 mt-1 flex-shrink-0">▸</span>
               {item}
             </li>
           ))}
@@ -62,18 +62,18 @@ export default function MarketLandscapeView({ landscape }: { landscape: MarketLa
       </div>
 
       {/* Tendances */}
-      <div className="card p-5 md:col-span-2 border-t-4 border-t-blue-400">
-        <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3">
-          <TrendingUp size={18} className="text-blue-500" />
+      <div className="card p-5 md:col-span-2 border-t-4 border-t-secondary-500">
+        <h3 className="font-bold text-white flex items-center gap-2 mb-3 font-display text-sm">
+          <TrendingUp size={18} className="text-secondary-500" />
           Tendances du secteur (2024-2025)
         </h3>
         <div className="grid sm:grid-cols-2 gap-3">
           {landscape.tendances.map((item, i) => (
-            <div key={i} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex gap-3 items-start">
-               <span className="text-blue-500 font-bold bg-blue-100 w-6 h-6 flex items-center justify-center rounded text-xs flex-shrink-0">
-                 {i + 1}
-               </span>
-               <p className="text-sm text-slate-700">{item}</p>
+            <div key={i} className="bg-[#1C2128] border border-[#2D3541] p-3 flex gap-3 items-start">
+              <span className="text-secondary-500 font-bold bg-[#2D3541] w-6 h-6 flex items-center justify-center text-xs flex-shrink-0 font-mono">
+                {i + 1}
+              </span>
+              <p className="text-sm text-[#D1D5DB]">{item}</p>
             </div>
           ))}
         </div>
