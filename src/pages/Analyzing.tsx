@@ -93,9 +93,9 @@ export default function Analyzing() {
   const stageIndex = ANALYZING_STAGES.findIndex(s => s === stage);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#0A0E14]">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-[#F8F9FA]">
       {/* Background grid */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" aria-hidden />
+      <div className="absolute inset-0 bg-grid-pattern opacity-100 pointer-events-none" aria-hidden />
 
       {/* Top red accent */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-primary-500" />
@@ -107,7 +107,7 @@ export default function Analyzing() {
             <div className="w-10 h-10 bg-primary-500 flex items-center justify-center text-white font-black text-lg font-mono border-2 border-primary-700">
               ◈
             </div>
-            <span className="text-white font-bold text-xl font-display">VeritAudit<span className="text-primary-500">.ai</span></span>
+            <span className="text-[#0F172A] font-bold text-xl font-display">VeritAudit<span className="text-primary-500">.ai</span></span>
           </div>
         </div>
 
@@ -116,12 +116,12 @@ export default function Analyzing() {
           <div className="relative w-32 h-32">
             {/* Outer rotating ring */}
             <div
-              className="absolute inset-0 rounded-full border-2 border-primary-900 border-t-primary-500 animate-spin-slow"
+              className="absolute inset-0 rounded-full border-2 border-[#E2E8F0] border-t-primary-500 animate-spin-slow"
               style={{ animationDuration: '4s' }}
             />
             {/* Inner rotating ring */}
             <div
-              className="absolute inset-3 rounded-full border-2 border-[#2D3541] border-b-secondary-500 animate-spin-slow"
+              className="absolute inset-3 rounded-full border-2 border-[#F1F5F9] border-b-secondary-500 animate-spin-slow"
               style={{ animationDuration: '3s', animationDirection: 'reverse' }}
             />
             {/* Center stage emoji */}
@@ -141,8 +141,8 @@ export default function Analyzing() {
 
         {/* Project name */}
         <div className="text-center">
-          <p className="text-[#4B5563] text-xs font-bold uppercase tracking-widest font-mono">Analyse de</p>
-          <h1 className="mt-1 text-2xl font-black text-white font-display">"{projectName}"</h1>
+          <p className="text-[#94A3B8] text-xs font-bold uppercase tracking-widest font-mono">Analyse de</p>
+          <h1 className="mt-1 text-2xl font-black text-[#0F172A] font-display">"{projectName}"</h1>
         </div>
 
         {/* Stage labels */}
@@ -159,20 +159,20 @@ export default function Analyzing() {
                 {/* Status indicator — square */}
                 <div className={`w-7 h-7 flex items-center justify-center flex-shrink-0 transition-all duration-300 border-2
                   ${isDone
-                    ? 'bg-emerald-900/30 border-emerald-700'
+                    ? 'bg-emerald-50 border-emerald-200'
                     : isCurrent
-                    ? 'bg-primary-900/30 border-primary-600 animate-pulse-slow'
-                    : 'bg-[#1C2128] border-[#2D3541]'}`}>
+                    ? 'bg-red-50 border-primary-400 animate-pulse-slow'
+                    : 'bg-white border-[#E2E8F0]'}`}>
                   {isDone ? (
                     <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-                      <path d="M1 5L4 8L11 1" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M1 5L4 8L11 1" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   ) : (
                     <span className="text-sm">{s.emoji}</span>
                   )}
                 </div>
 
-                <span className={`text-sm font-medium font-mono ${isCurrent ? 'text-white' : isDone ? 'text-emerald-400' : 'text-[#4B5563]'}`}>
+                <span className={`text-sm font-medium font-mono ${isCurrent ? 'text-[#0F172A]' : isDone ? 'text-emerald-700' : 'text-[#94A3B8]'}`}>
                   {s.label}
                   {isCurrent && (
                     <span className="ml-2 inline-block">
@@ -190,7 +190,7 @@ export default function Analyzing() {
                 </span>
 
                 {isDone && (
-                  <span className="ml-auto text-xs text-emerald-400 font-bold font-mono">✓</span>
+                  <span className="ml-auto text-xs text-emerald-600 font-bold font-mono">✓</span>
                 )}
               </div>
             );
@@ -199,11 +199,11 @@ export default function Analyzing() {
 
         {/* Progress bar */}
         <div className="space-y-2">
-          <div className="flex justify-between text-xs text-[#4B5563] font-mono">
+          <div className="flex justify-between text-xs text-[#94A3B8] font-mono">
             <span>Progression</span>
-            <span className="text-white font-bold">{progressPct}%</span>
+            <span className="text-[#0F172A] font-bold">{progressPct}%</span>
           </div>
-          <div className="h-2 bg-[#1C2128] border border-[#2D3541] overflow-hidden">
+          <div className="h-2 bg-[#F1F5F9] border border-[#E2E8F0] overflow-hidden">
             <div
               className="h-full transition-all duration-150 ease-linear bg-primary-500"
               style={{ width: `${progressPct}%` }}
@@ -215,14 +215,14 @@ export default function Analyzing() {
         <div className="text-center min-h-[3rem] flex items-center justify-center">
           <p
             key={msgIndex}
-            className="text-[#6B7280] text-sm italic leading-relaxed animate-fade-in max-w-xs font-mono"
+            className="text-[#475569] text-sm italic leading-relaxed animate-fade-in max-w-xs font-mono"
           >
             "{MOTIVATING_MESSAGES[msgIndex]}"
           </p>
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-[#2D3541] text-xs font-mono border-t border-[#1C2128] pt-4">
+        <p className="text-center text-[#CBD5E1] text-xs font-mono border-t border-[#E2E8F0] pt-4">
           Ne fermez pas cette fenêtre · L'analyse est en cours
         </p>
       </div>

@@ -83,7 +83,7 @@ export default function ScoreGauge({
             cy={cy}
             r={radius}
             fill="none"
-            stroke="#2D3541"
+            stroke="#E2E8F0"
             strokeWidth={strokeWidth}
           />
 
@@ -128,7 +128,7 @@ export default function ScoreGauge({
             fontSize={subFontSize}
             fontWeight="500"
             fontFamily='"JetBrains Mono", monospace'
-            fill="#6B7280"
+            fill="#94A3B8"
           >
             /100
           </text>
@@ -140,7 +140,7 @@ export default function ScoreGauge({
           <span className={`score-badge text-base ${config.badgeClass}`}>
             {config.emoji} {config.label}
           </span>
-          <p className="mt-2 text-[#6B7280] text-xs font-mono uppercase tracking-widest">
+          <p className="mt-2 text-[#94A3B8] text-xs font-mono uppercase tracking-widest">
             Niveau : {config.levelLabel}
           </p>
         </div>

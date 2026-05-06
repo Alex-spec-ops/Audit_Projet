@@ -19,15 +19,15 @@ function PhaseNode({ phase, isSelected, onClick, isLast }: PhaseNodeProps) {
           onClick={onClick}
           className={`relative flex-shrink-0 w-16 h-16 border-2 flex flex-col items-center justify-center gap-0.5 transition-all duration-200
             ${phase.isCurrentPhase
-              ? 'border-primary-500 bg-primary-900/20 shadow-md'
+              ? 'border-primary-500 bg-[#FEF2F2] shadow-primary-sm'
               : isSelected
-              ? 'border-primary-600 bg-primary-900/10'
-              : 'border-[#3F4753] bg-[#151921] hover:border-primary-700 hover:bg-primary-900/10'
+              ? 'border-primary-400 bg-red-50'
+              : 'border-[#E2E8F0] bg-white hover:border-primary-300 hover:bg-red-50'
             }`}
           aria-label={`Phase ${phase.id} : ${phase.name}`}
         >
           <span className="text-2xl leading-none" role="img" aria-hidden>{phase.icon}</span>
-          <span className="text-[10px] font-bold text-[#4B5563] uppercase tracking-wide font-mono">P{phase.id}</span>
+          <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wide font-mono">P{phase.id}</span>
           {phase.isCurrentPhase && (
             <span className="absolute -top-1.5 -right-1.5">
               <MapPin size={14} className="text-primary-500 fill-primary-500" />
@@ -36,12 +36,12 @@ function PhaseNode({ phase, isSelected, onClick, isLast }: PhaseNodeProps) {
         </button>
 
         <div className="mt-2 text-center w-20">
-          <p className={`text-xs font-semibold leading-tight font-display ${phase.isCurrentPhase ? 'text-primary-400' : 'text-white'}`}>
+          <p className={`text-xs font-semibold leading-tight font-display ${phase.isCurrentPhase ? 'text-primary-600' : 'text-[#0F172A]'}`}>
             {phase.name}
           </p>
-          <p className="text-[10px] text-[#4B5563] mt-0.5 leading-tight font-mono">{phase.duration}</p>
+          <p className="text-[10px] text-[#94A3B8] mt-0.5 leading-tight font-mono">{phase.duration}</p>
           {phase.isCurrentPhase && (
-            <span className="inline-block mt-1 text-[9px] font-bold bg-primary-900/30 text-primary-400 px-1.5 py-0.5 border border-primary-800 font-mono">
+            <span className="inline-block mt-1 text-[9px] font-bold bg-red-50 text-primary-600 px-1.5 py-0.5 border border-primary-200 font-mono">
               Vous êtes ici
             </span>
           )}
@@ -49,7 +49,7 @@ function PhaseNode({ phase, isSelected, onClick, isLast }: PhaseNodeProps) {
       </div>
 
       {!isLast && (
-        <div className="flex-shrink-0 mt-8 w-6 md:w-10 h-0.5 bg-[#2D3541]" aria-hidden />
+        <div className="flex-shrink-0 mt-8 w-6 md:w-10 h-0.5 bg-[#E2E8F0]" aria-hidden />
       )}
     </div>
   );
@@ -64,23 +64,23 @@ interface DetailPanelProps {
 
 function DetailPanel({ phase, onClose }: DetailPanelProps) {
   return (
-    <div className="card p-6 border-primary-700 border-2 animate-slide-in-right space-y-6">
+    <div className="card p-6 border-primary-500 border-2 animate-slide-in-right space-y-6">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <span className="text-3xl" role="img" aria-label={phase.name}>{phase.icon}</span>
           <div>
-            <p className="text-xs font-semibold text-[#4B5563] uppercase tracking-wide font-mono">Phase {phase.id}</p>
-            <h4 className="font-bold text-white text-lg font-display">{phase.name}</h4>
-            <span className="text-sm text-[#6B7280] font-mono">{phase.duration}</span>
+            <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wide font-mono">Phase {phase.id}</p>
+            <h4 className="font-bold text-[#0F172A] text-lg font-display">{phase.name}</h4>
+            <span className="text-sm text-[#475569] font-mono">{phase.duration}</span>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="p-1.5 hover:bg-[#1C2128] transition-colors border border-[#2D3541]"
+          className="p-1.5 hover:bg-[#F8F9FA] transition-colors border border-[#E2E8F0]"
           aria-label="Fermer le détail"
         >
-          <X size={18} className="text-[#6B7280]" />
+          <X size={18} className="text-[#94A3B8]" />
         </button>
       </div>
 
@@ -88,13 +88,13 @@ function DetailPanel({ phase, onClose }: DetailPanelProps) {
         {/* Left column */}
         <div className="space-y-5">
           <div>
-            <h5 className="text-sm font-semibold text-[#9CA3AF] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
+            <h5 className="text-sm font-semibold text-[#475569] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
               <Target size={14} className="text-primary-500" />
               Objectifs SMART
             </h5>
             <ul className="space-y-2">
               {phase.objectifs.map((obj, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-[#D1D5DB]">
+                <li key={i} className="flex items-start gap-2.5 text-sm text-[#475569]">
                   <CheckCircle2 size={14} className="text-primary-500 mt-0.5 flex-shrink-0" />
                   {obj}
                 </li>
@@ -103,14 +103,14 @@ function DetailPanel({ phase, onClose }: DetailPanelProps) {
           </div>
 
           <div>
-            <h5 className="text-sm font-semibold text-[#9CA3AF] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
-              <Package size={14} className="text-emerald-400" />
+            <h5 className="text-sm font-semibold text-[#475569] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
+              <Package size={14} className="text-emerald-600" />
               Livrables concrets
             </h5>
             <ul className="space-y-2">
               {phase.livrables.map((l, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-[#D1D5DB]">
-                  <span className="w-4 h-4 mt-0.5 flex-shrink-0 bg-emerald-900/30 text-emerald-400 text-[10px] font-bold font-mono flex items-center justify-center border border-emerald-800">
+                <li key={i} className="flex items-start gap-2.5 text-sm text-[#475569]">
+                  <span className="w-4 h-4 mt-0.5 flex-shrink-0 bg-emerald-50 text-emerald-700 text-[10px] font-bold font-mono flex items-center justify-center border border-emerald-200">
                     {i + 1}
                   </span>
                   {l}
@@ -120,13 +120,13 @@ function DetailPanel({ phase, onClose }: DetailPanelProps) {
           </div>
 
           <div>
-            <h5 className="text-sm font-semibold text-[#9CA3AF] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
-              <Flag size={14} className="text-secondary-500" />
+            <h5 className="text-sm font-semibold text-[#475569] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
+              <Flag size={14} className="text-secondary-600" />
               KPIs de succès
             </h5>
             <ul className="space-y-1.5">
               {phase.kpis.map((kpi, i) => (
-                <li key={i} className="text-sm text-[#D1D5DB] pl-3 border-l-4 border-secondary-700">
+                <li key={i} className="text-sm text-[#475569] pl-3 border-l-4 border-secondary-300">
                   {kpi}
                 </li>
               ))}
@@ -137,65 +137,65 @@ function DetailPanel({ phase, onClose }: DetailPanelProps) {
         {/* Right column */}
         <div className="space-y-5">
           <div>
-            <h5 className="text-sm font-semibold text-[#9CA3AF] mb-3 flex items-center gap-1.5 font-display uppercase tracking-wider">
-              <Wallet size={14} className="text-secondary-500" />
+            <h5 className="text-sm font-semibold text-[#475569] mb-3 flex items-center gap-1.5 font-display uppercase tracking-wider">
+              <Wallet size={14} className="text-secondary-600" />
               Ressources nécessaires
             </h5>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
-                <div className="w-7 h-7 bg-[#1C2128] border border-[#3F4753] flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 bg-[#F8F9FA] border border-[#E2E8F0] flex items-center justify-center flex-shrink-0">
                   <Wallet size={13} className="text-secondary-500" />
                 </div>
                 <div>
-                  <span className="text-[#4B5563] text-xs block font-mono uppercase">Budget</span>
-                  <span className="font-semibold text-white font-mono">{phase.ressources.budget}</span>
+                  <span className="text-[#94A3B8] text-xs block font-mono uppercase">Budget</span>
+                  <span className="font-semibold text-[#0F172A] font-mono">{phase.ressources.budget}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="w-7 h-7 bg-[#1C2128] border border-[#3F4753] flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 bg-[#F8F9FA] border border-[#E2E8F0] flex items-center justify-center flex-shrink-0">
                   <Users size={13} className="text-primary-500" />
                 </div>
                 <div>
-                  <span className="text-[#4B5563] text-xs block font-mono uppercase">Équipe</span>
-                  <span className="font-semibold text-white font-mono">{phase.ressources.personnes}</span>
+                  <span className="text-[#94A3B8] text-xs block font-mono uppercase">Équipe</span>
+                  <span className="font-semibold text-[#0F172A] font-mono">{phase.ressources.personnes}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="w-7 h-7 bg-[#1C2128] border border-[#3F4753] flex items-center justify-center flex-shrink-0">
-                  <Clock size={13} className="text-[#9CA3AF]" />
+                <div className="w-7 h-7 bg-[#F8F9FA] border border-[#E2E8F0] flex items-center justify-center flex-shrink-0">
+                  <Clock size={13} className="text-[#475569]" />
                 </div>
                 <div>
-                  <span className="text-[#4B5563] text-xs block font-mono uppercase">Temps</span>
-                  <span className="font-semibold text-white font-mono">{phase.ressources.temps}</span>
+                  <span className="text-[#94A3B8] text-xs block font-mono uppercase">Temps</span>
+                  <span className="font-semibold text-[#0F172A] font-mono">{phase.ressources.temps}</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div>
-            <h5 className="text-sm font-semibold text-[#9CA3AF] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
-              <AlertTriangle size={14} className="text-secondary-500" />
+            <h5 className="text-sm font-semibold text-[#475569] mb-2 flex items-center gap-1.5 font-display uppercase tracking-wider">
+              <AlertTriangle size={14} className="text-secondary-600" />
               Risques & points de vigilance
             </h5>
             <ul className="space-y-2">
               {phase.risques.map((r, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-[#D1D5DB] p-2 bg-secondary-900/10 border border-secondary-900">
-                  <AlertTriangle size={13} className="text-secondary-500 mt-0.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-2 text-sm text-[#475569] p-2 bg-amber-50 border border-amber-200">
+                  <AlertTriangle size={13} className="text-amber-600 mt-0.5 flex-shrink-0" />
                   {r}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="p-3 border-2 border-dashed border-[#3F4753] bg-[#1C2128]">
-            <p className="text-xs font-bold text-[#6B7280] uppercase tracking-wide mb-1 font-mono">Point de décision GO / NO-GO</p>
-            <p className="text-sm text-white font-medium">{phase.goNogo}</p>
+          <div className="p-3 border-2 border-dashed border-[#E2E8F0] bg-[#F8F9FA]">
+            <p className="text-xs font-bold text-[#94A3B8] uppercase tracking-wide mb-1 font-mono">Point de décision GO / NO-GO</p>
+            <p className="text-sm text-[#0F172A] font-medium">{phase.goNogo}</p>
           </div>
 
           {phase.isCurrentPhase && (
-            <div className="flex items-center gap-2 p-3 bg-primary-900/20 border border-primary-800">
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-primary-200">
               <MapPin size={14} className="text-primary-500" />
-              <p className="text-xs font-medium text-primary-400">
+              <p className="text-xs font-medium text-primary-600">
                 C'est la phase dans laquelle vous vous trouvez actuellement.
               </p>
             </div>
@@ -212,19 +212,19 @@ function JalonsCritiques({ jalons, budget }: { jalons: string[]; budget: string 
   return (
     <div className="card p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h4 className="font-semibold text-white flex items-center gap-2 font-display text-sm">
+        <h4 className="font-semibold text-[#0F172A] flex items-center gap-2 font-display text-sm">
           <Flag size={18} className="text-primary-500" />
           Jalons critiques & budget global
         </h4>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary-900/20 border border-secondary-800">
-          <Wallet size={14} className="text-secondary-500" />
-          <span className="text-sm font-semibold text-secondary-400 font-mono">{budget}</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200">
+          <Wallet size={14} className="text-secondary-600" />
+          <span className="text-sm font-semibold text-secondary-700 font-mono">{budget}</span>
         </div>
       </div>
       <ol className="space-y-2">
         {jalons.map((j, i) => (
-          <li key={i} className="flex items-start gap-3 text-sm text-[#D1D5DB]">
-            <span className="w-5 h-5 mt-0.5 bg-primary-900/30 text-primary-400 text-[11px] font-bold font-mono flex items-center justify-center flex-shrink-0 border border-primary-800">
+          <li key={i} className="flex items-start gap-3 text-sm text-[#475569]">
+            <span className="w-5 h-5 mt-0.5 bg-red-50 text-primary-600 text-[11px] font-bold font-mono flex items-center justify-center flex-shrink-0 border border-primary-200">
               {i + 1}
             </span>
             {j}
@@ -250,11 +250,11 @@ function Phase0Checklist({ phase }: { phase: RoadmapPhase }) {
 
   return (
     <div className="card p-6">
-      <h4 className="font-semibold text-white mb-4 flex items-center gap-2 font-display text-sm">
+      <h4 className="font-semibold text-[#0F172A] mb-4 flex items-center gap-2 font-display text-sm">
         <CheckCircle2 size={18} className="text-primary-500" />
         Progression Phase 0 — Validation
       </h4>
-      <p className="text-sm text-[#6B7280] mb-4">
+      <p className="text-sm text-[#475569] mb-4">
         Cochez les objectifs au fur et à mesure de votre avancement.
       </p>
       <ul className="space-y-2.5">
@@ -263,7 +263,7 @@ function Phase0Checklist({ phase }: { phase: RoadmapPhase }) {
             <button
               onClick={() => toggle(i)}
               className={`flex-shrink-0 w-5 h-5 mt-0.5 border-2 flex items-center justify-center transition-all duration-150
-                ${completed.has(i) ? 'bg-primary-500 border-primary-500' : 'border-[#3F4753] hover:border-primary-500'}`}
+                ${completed.has(i) ? 'bg-primary-500 border-primary-500' : 'border-[#E2E8F0] hover:border-primary-400'}`}
               aria-label={completed.has(i) ? `Décocher : ${obj}` : `Cocher : ${obj}`}
             >
               {completed.has(i) && (
@@ -272,15 +272,15 @@ function Phase0Checklist({ phase }: { phase: RoadmapPhase }) {
                 </svg>
               )}
             </button>
-            <span className={`text-sm leading-relaxed ${completed.has(i) ? 'line-through text-[#4B5563]' : 'text-[#D1D5DB]'}`}>
+            <span className={`text-sm leading-relaxed ${completed.has(i) ? 'line-through text-[#CBD5E1]' : 'text-[#475569]'}`}>
               {obj}
             </span>
           </li>
         ))}
       </ul>
       {completed.size > 0 && (
-        <div className="mt-4 p-3 bg-emerald-900/20 border border-emerald-800">
-          <p className="text-sm font-medium text-emerald-400 font-mono">
+        <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200">
+          <p className="text-sm font-medium text-emerald-700 font-mono">
             ✅ {completed.size}/{phase.objectifs.length} objectifs complétés
           </p>
         </div>
